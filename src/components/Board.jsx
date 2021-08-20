@@ -50,28 +50,28 @@ const Board = () => {
     let moveCount = board.userClicked.length;
     console.log("moveCount: ", moveCount);
     switch (moveCount) {
-      case 0:
+      case 1:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[0] != board.possibleWins[i][0]) {
             return board.possibleWins[i][0];
           }
         }
         break;
-      case 1:
+      case 2:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[1] != board.possibleWins[i][1]) {
             return board.possibleWins[i][1];
           }
         }
         break;
-      case 2:
+      case 3:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[2] != board.possibleWins[i][2]) {
             return board.possibleWins[i][2];
           }
         }
         break;
-      case 3:
+      case 4:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[0] != board.possibleWins[i][0]) {
             return board.possibleWins[i][0];
