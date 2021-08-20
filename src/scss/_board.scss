@@ -1,0 +1,12 @@
+.fullGrid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 255px;
+    height: 255px;
+}
+.gridBlock {
+    margin: 5px;
+    height: 75px;
+    width: 75px;
+    background-color: grey;
+}
