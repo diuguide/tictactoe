@@ -9,6 +9,7 @@ const Board = () => {
   useEffect(() => {
     if (board.userClicked.length != 0) {
       computerMove();
+      checkWin();
     }
   }, [board.userClicked]);
 
@@ -20,7 +21,6 @@ const Board = () => {
   const userClick = (num) => {
     if (checkClicked(num)) {
       markClicked("green", num);
-      dispatch(userMove(num));
     }
   };
 
@@ -32,23 +32,27 @@ const Board = () => {
   };
 
   const markClicked = (color, num) => {
-    console.log("num inside mark clicked", num);
     let current = document.getElementById(num);
     current.style.backgroundColor = color;
+    if(color == 'green') {
+      dispatch(userMove(num));
+      console.log("user dispatch");
+    } else if (color == 'red') {
+      dispatch(compMove(num));
+      console.log("computer dispatch");
+    }
   };
 
   const computerMove = () => {
     let compChoice = bestMove();
     if (checkClicked(compChoice)) {
-      console.log("checkClicked computer move");
-      dispatch(compMove(compChoice));
       markClicked("red", compChoice);
     }
   };
 
   const bestMove = () => {
     let moveCount = board.userClicked.length;
-    console.log("moveCount: ", moveCount);
+
     switch (moveCount) {
       case 1:
         for (let i = 0; i < board.possibleWins.length; i++) {
@@ -80,6 +84,31 @@ const Board = () => {
         break;
       default:
         break;
+    }
+  };
+
+  const checkWin = () => {
+    let possible = board.possibleWins;
+    if (board.userClicked.length >= 3) {
+      for (let i = 0; i < possible.length; i++) {
+        if (
+          board.userClicked[0] === possible[i][0] &&
+          board.userClicked[1] === possible[i][1] &&
+          board.userClicked[2] === possible[i][2]
+        ) {
+          console.log(" User Wins");
+        }
+      }
+    } else if (board.compClicked.length >= 3) {
+      for (let i = 0; i < possible.length; i++) {
+        if (
+          board.compClicked[0] === possible[i][0] &&
+          board.compClicked[1] === possible[i][1] &&
+          board.compClicked[2] === possible[i][2]
+        ) {
+          console.log("Comp Wins");
+        }
+      }
     }
   };
 
