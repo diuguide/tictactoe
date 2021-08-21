@@ -47,6 +47,8 @@ const Board = () => {
     let compChoice = bestMove();
     if (checkClicked(compChoice)) {
       markClicked("red", compChoice);
+    } else {
+      computerMove();
     }
   };
 
@@ -57,28 +59,28 @@ const Board = () => {
       case 1:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[0] != board.possibleWins[i][0]) {
-            return board.possibleWins[i][0];
+            return board.possibleWins[i][generateRandom(3)];
           }
         }
         break;
       case 2:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[1] != board.possibleWins[i][1]) {
-            return board.possibleWins[i][1];
+            return board.possibleWins[i][generateRandom(3)];
           }
         }
         break;
       case 3:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[2] != board.possibleWins[i][2]) {
-            return board.possibleWins[i][2];
+            return board.possibleWins[i][generateRandom(3)];
           }
         }
         break;
       case 4:
         for (let i = 0; i < board.possibleWins.length; i++) {
           if (board.userClicked[0] != board.possibleWins[i][0]) {
-            return board.possibleWins[i][0];
+            return board.possibleWins[i][generateRandom(3)];
           }
         }
         break;
@@ -86,6 +88,10 @@ const Board = () => {
         break;
     }
   };
+
+  const generateRandom = (len) => {
+    return Math.floor(Math.random() * len);
+  }
 
   const checkWin = () => {
     let possible = board.possibleWins;

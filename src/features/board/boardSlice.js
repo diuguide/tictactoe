@@ -22,9 +22,11 @@ const boardSlice = createSlice({
   reducers: {
     userMove: (state, action) => {
       state.userClicked.push(action.payload);
+      state.userClicked = state.userClicked.sort();
     },
     compMove: (state, action) => {
       state.compClicked.push(action.payload);
+      state.compClicked = state.compClicked.sort();
     },
     gameOver: (state) => {
       state.userClicked = [];
