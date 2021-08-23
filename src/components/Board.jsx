@@ -47,8 +47,6 @@ const Board = () => {
     let compChoice = bestMove();
     if (checkClicked(compChoice)) {
       markClicked("red", compChoice);
-    } else {
-      computerMove();
     }
   };
 
