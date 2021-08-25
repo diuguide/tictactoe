@@ -2,13 +2,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { boardState, userMove, compMove } from "../features/board/boardSlice";
 import { useEffect } from "react";
 
-const Board = () => {
+const Board = ({double}) => {
   const board = useSelector(boardState);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (board.userClicked.length != 0) {
-      computerMove();
+      // computerMove();
+
       checkWin();
     }
   }, [board.userClicked]);
@@ -34,32 +36,42 @@ const Board = () => {
   const markClicked = (color, num) => {
     let current = document.getElementById(num);
     current.style.backgroundColor = color;
-    if(color == 'green') {
+    if (color == "green") {
       dispatch(userMove(num));
+      double();
+      computerMove();
       console.log("user dispatch");
-    } else if (color == 'red') {
+      
+    } else if (color == "red") {
       dispatch(compMove(num));
       console.log("computer dispatch");
     }
   };
 
   const computerMove = () => {
-    let compChoice = bestMove();
-    if (checkClicked(compChoice)) {
-      markClicked("red", compChoice);
-    }
+    console.log("state inside computer move: ", board);
+    checkSync();
+    // let compChoice = 1;
+    // if (checkClicked(compChoice)) {
+    //   markClicked("red", compChoice);
+    // }
   };
+
+  const checkSync = () => {
+    console.log("check sync", board);
+  }
 
   const bestMove = () => {
     let moveCount = board.userClicked.length;
 
     switch (moveCount) {
       case 1:
-        for (let i = 0; i < board.possibleWins.length; i++) {
-          if (board.userClicked[0] != board.possibleWins[i][0]) {
-            return board.possibleWins[i][generateRandom(3)];
-          }
-        }
+        // for (let i = 0; i < board.possibleWins.length; i++) {
+        //   if (board.userClicked[0] != board.possibleWins[i][0]) {
+        //     return board.possibleWins[i][generateRandom(3)];
+        //   }
+        // }
+
         break;
       case 2:
         for (let i = 0; i < board.possibleWins.length; i++) {
@@ -89,16 +101,16 @@ const Board = () => {
 
   const generateRandom = (len) => {
     return Math.floor(Math.random() * len);
-  }
+  };
 
   const checkWin = () => {
     let possible = board.possibleWins;
     if (board.userClicked.length >= 3) {
       for (let i = 0; i < possible.length; i++) {
         if (
-          board.userClicked[0] === possible[i][0] &&
-          board.userClicked[1] === possible[i][1] &&
-          board.userClicked[2] === possible[i][2]
+          board.userClicked.includes(possible[i][0]) &&
+          board.userClicked.includes(possible[i][1]) &&
+          board.userClicked.includes(possible[i][2])
         ) {
           console.log(" User Wins");
         }
@@ -106,9 +118,9 @@ const Board = () => {
     } else if (board.compClicked.length >= 3) {
       for (let i = 0; i < possible.length; i++) {
         if (
-          board.compClicked[0] === possible[i][0] &&
-          board.compClicked[1] === possible[i][1] &&
-          board.compClicked[2] === possible[i][2]
+          board.compClicked.includes(possible[i][0]) &&
+          board.compClicked.includes(possible[i][1]) &&
+          board.compClicked.includes(possible[i][2])
         ) {
           console.log("Comp Wins");
         }
