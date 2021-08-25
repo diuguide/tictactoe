@@ -17,7 +17,7 @@ const computerSlice = createSlice({
     initialState,
     reducers: {
         click: (state, action) => {
-            state.notClicked = state.notClicked.filter(choice => choice != action.payload);
+            
         },
         computerAction: (state) => {
             computerMove();

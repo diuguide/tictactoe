@@ -25,12 +25,10 @@ const boardSlice = createSlice({
     userMove: (state, action) => {
       state.userClicked.push(action.payload);
       state.userClicked = state.userClicked.sort();
-      state.notClicked = state.notClicked.filter(choice => choice != action.payload);
     },
     compMove: (state, action) => {
       state.compClicked.push(action.payload);
       state.compClicked = state.compClicked.sort();
-      state.notClicked = state.notClicked.filter(choice => choice != action.payload);
     },
     gameOver: (state) => {
       state.userClicked = [];

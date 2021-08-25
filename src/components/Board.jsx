@@ -1,19 +1,13 @@
-import { useSelector, useDispatch } from "react-redux";
-import { boardState, userMove, compMove } from "../features/board/boardSlice";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { boardState } from "../features/board/boardSlice";
+import { useRef } from "react";
 
-const Board = ({double}) => {
+const Board = () => {
   const board = useSelector(boardState);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (board.userClicked.length != 0) {
-      // computerMove();
-
-      checkWin();
-    }
-  }, [board.userClicked]);
+  const notClicked = useRef([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+  const userClicked = useRef([]);
+  const compClicked = useRef([]);
+  const gameOver = useRef(false);
 
   const handleClick = (e) => {
     const { id } = e.target;
@@ -21,108 +15,61 @@ const Board = ({double}) => {
   };
 
   const userClick = (num) => {
-    if (checkClicked(num)) {
+    if (notClicked.current.includes(num)) {
       markClicked("green", num);
     }
-  };
-
-  const checkClicked = (num) => {
-    if (!board.userClicked.includes(num) && !board.compClicked.includes(num)) {
-      return true;
-    }
-    return false;
   };
 
   const markClicked = (color, num) => {
     let current = document.getElementById(num);
     current.style.backgroundColor = color;
-    if (color == "green") {
-      dispatch(userMove(num));
-      double();
-      computerMove();
-      console.log("user dispatch");
-      
-    } else if (color == "red") {
-      dispatch(compMove(num));
-      console.log("computer dispatch");
+    notClicked.current = notClicked.current.filter((choice) => choice !== num);
+    if (color === "green") {
+      let current = userClicked.current;
+      current.push(num);
+      current.sort();
+      userClicked.current = current;
+      checkWin();
+      if (!gameOver.current) {
+        computerMove();
+      }
+    } else if (color === "red") {
+      let current = compClicked.current;
+      current.push(num);
+      current.sort();
+      compClicked.current = current;
+      checkWin();
     }
   };
 
   const computerMove = () => {
-    console.log("state inside computer move: ", board);
-    checkSync();
-    // let compChoice = 1;
-    // if (checkClicked(compChoice)) {
-    //   markClicked("red", compChoice);
-    // }
+    let compChoice =
+      notClicked.current[generateRandom(notClicked.current.length - 1)];
+    markClicked("red", compChoice);
   };
-
-  const checkSync = () => {
-    console.log("check sync", board);
-  }
-
-  const bestMove = () => {
-    let moveCount = board.userClicked.length;
-
-    switch (moveCount) {
-      case 1:
-        // for (let i = 0; i < board.possibleWins.length; i++) {
-        //   if (board.userClicked[0] != board.possibleWins[i][0]) {
-        //     return board.possibleWins[i][generateRandom(3)];
-        //   }
-        // }
-
-        break;
-      case 2:
-        for (let i = 0; i < board.possibleWins.length; i++) {
-          if (board.userClicked[1] != board.possibleWins[i][1]) {
-            return board.possibleWins[i][generateRandom(3)];
-          }
-        }
-        break;
-      case 3:
-        for (let i = 0; i < board.possibleWins.length; i++) {
-          if (board.userClicked[2] != board.possibleWins[i][2]) {
-            return board.possibleWins[i][generateRandom(3)];
-          }
-        }
-        break;
-      case 4:
-        for (let i = 0; i < board.possibleWins.length; i++) {
-          if (board.userClicked[0] != board.possibleWins[i][0]) {
-            return board.possibleWins[i][generateRandom(3)];
-          }
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
+  
   const generateRandom = (len) => {
     return Math.floor(Math.random() * len);
   };
 
   const checkWin = () => {
     let possible = board.possibleWins;
-    if (board.userClicked.length >= 3) {
+    if (userClicked.current.length >= 3) {
       for (let i = 0; i < possible.length; i++) {
         if (
-          board.userClicked.includes(possible[i][0]) &&
-          board.userClicked.includes(possible[i][1]) &&
-          board.userClicked.includes(possible[i][2])
+          userClicked.current.includes(possible[i][0]) &&
+          userClicked.current.includes(possible[i][1]) &&
+          userClicked.current.includes(possible[i][2])
         ) {
           console.log(" User Wins");
-        }
-      }
-    } else if (board.compClicked.length >= 3) {
-      for (let i = 0; i < possible.length; i++) {
-        if (
-          board.compClicked.includes(possible[i][0]) &&
-          board.compClicked.includes(possible[i][1]) &&
-          board.compClicked.includes(possible[i][2])
+          gameOver.current = true;
+        } else if (
+          compClicked.current.includes(possible[i][0]) &&
+          compClicked.current.includes(possible[i][1]) &&
+          compClicked.current.includes(possible[i][2])
         ) {
           console.log("Comp Wins");
+          gameOver.current = true;
         }
       }
     }
