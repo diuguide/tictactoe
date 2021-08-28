@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { boardState } from "../features/board/boardSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { boardState, showMessage, hideMessage } from "../features/board/boardSlice";
 import { useRef } from "react";
 
 const Board = () => {
@@ -8,6 +8,7 @@ const Board = () => {
   const userClicked = useRef([]);
   const compClicked = useRef([]);
   const gameOver = useRef(false);
+  const dispatch = useDispatch();
 
   const handleClick = (e) => {
     const { id } = e.target;
@@ -47,7 +48,7 @@ const Board = () => {
       notClicked.current[generateRandom(notClicked.current.length - 1)];
     markClicked("red", compChoice);
   };
-  
+
   const generateRandom = (len) => {
     return Math.floor(Math.random() * len);
   };
@@ -61,15 +62,16 @@ const Board = () => {
           userClicked.current.includes(possible[i][1]) &&
           userClicked.current.includes(possible[i][2])
         ) {
-          console.log(" User Wins");
           gameOver.current = true;
+          dispatch(showMessage("USER"));
+          
         } else if (
           compClicked.current.includes(possible[i][0]) &&
           compClicked.current.includes(possible[i][1]) &&
           compClicked.current.includes(possible[i][2])
         ) {
-          console.log("Comp Wins");
           gameOver.current = true;
+          dispatch(showMessage("COMPUTER"));
         }
       }
     }

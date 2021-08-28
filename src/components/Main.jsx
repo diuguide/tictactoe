@@ -1,8 +1,8 @@
 import { Row, Col, Container } from "react-bootstrap";
 import Board from "./Board";
+import Scoreboard from "./Scoreboard";
 
 const Main = () => {
-  
   return (
     <Container>
       <Row
@@ -15,7 +15,12 @@ const Main = () => {
           lg={9}
           className="d-flex justify-content-center align-items-center"
         >
-          <Board />
+          <Row>
+            <Col className="d-block">
+              <Scoreboard />
+              <Board />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Container>

@@ -15,7 +15,9 @@ const initialState = {
     [2, 4, 6],
   ],
   notClicked: [0,1,2,3,4,5,6,7,8],
-  move: false
+  move: false,
+  showMsg: false,
+  msg: ""
 };
 
 const boardSlice = createSlice({
@@ -33,10 +35,21 @@ const boardSlice = createSlice({
     gameOver: (state) => {
       state.userClicked = [];
       state.compClicked = [];
+      state.move = true;
     },
+    showMessage: (state, action) => {
+      state.msg = action.payload;
+      state.showMsg = true;
+      state.move = true;
+    },
+    hideMessage: (state) => {
+      state.msg = "";
+      state.showMsg = false;
+      state.move = false;
+    }
   },
 });
 
-export const { userMove, compMove, gameOver } = boardSlice.actions;
+export const { userMove, compMove, gameOver, hideMessage, showMessage } = boardSlice.actions;
 export const boardState = (state) => state.board;
 export default boardSlice.reducer;
